@@ -10,6 +10,9 @@
     
     <!-- مكتبة FontAwesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- مكتبة DOMPurify للأمان ضد XSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js" integrity="sha384-cwS6YdhLI7XS60eoDiC+egV0qHp8zI+Cms46R0nbn8JrmoAzV9uFL60etMZhAnSu" crossorigin="anonymous"></script>
 
     <style>
         :root {
@@ -1608,7 +1611,7 @@
                     get(userRef).then((snapshot) => {
                         if (snapshot.exists()) {
                             userProfile = snapshot.val();
-                            greetingArea.innerHTML = `مرحباً بك، <span>${userProfile.fullName}</span>`;
+                            greetingArea.innerHTML = DOMPurify.sanitize(`مرحباً بك، <span>${userProfile.fullName}</span>`);
                             settingsTriggerWrapper.style.display = 'block';
                             document.getElementById('profName').value = userProfile.fullName || '';
                             document.getElementById('profPhone').value = userProfile.phone || '';
@@ -1708,7 +1711,7 @@
                     });
 
                     if (hasOrders) {
-                        myOrdersList.innerHTML = html;
+                        myOrdersList.innerHTML = DOMPurify.sanitize(html);
                     } else {
                         myOrdersList.innerHTML = '<div class="empty-cart-text">لا توجد طلبات سابقة لك.</div>';
                     }
@@ -1741,7 +1744,7 @@
                 userProfile.fullName = newName;
                 userProfile.phone = newPhone;
                 userProfile.address = newAddress;
-                greetingArea.innerHTML = `مرحباً بك، <span>${newName}</span>`;
+                greetingArea.innerHTML = DOMPurify.sanitize(`مرحباً بك، <span>${newName}</span>`);
             }).catch(err => {
                 alert('حدث خطأ أثناء التحديث: ' + err.message);
                 saveProfileBtn.disabled = false;
@@ -1931,7 +1934,7 @@
                 return;
             }
 
-            productsGrid.innerHTML = paginatedList.map(p => {
+            productsGrid.innerHTML = DOMPurify.sanitize(paginatedList.map(p => {
                 let mediaHTML = '';
                 if (p.image) {
                     mediaHTML = `<img src="${p.image}" class="product-image-el" alt="${p.title}">`;
@@ -1970,7 +1973,7 @@
                         </div>
                     </div>
                 `;
-            }).join('');
+            }).join(''), { ADD_ATTR: ['onclick'] });
         }
 
         // أحداث أزرار التنقل بين الصفحات
@@ -2126,7 +2129,7 @@
             if (cart.length === 0) {
                 cartItemsList.innerHTML = `<div class="empty-cart-text">سلتك فارغة حالياً.</div>`;
             } else {
-                cartItemsList.innerHTML = cart.map((item, index) => {
+                cartItemsList.innerHTML = DOMPurify.sanitize(cart.map((item, index) => {
                     const noteContent = item.note ? `<div class="cart-item-desc-note">💡 ملاحظتك: ${item.note}</div>` : '';
                     return `
                         <div class="cart-item-card">
@@ -2147,7 +2150,7 @@
                             </div>
                         </div>
                     `;
-                }).join('');
+                }).join(''), { ADD_ATTR: ['onclick'] });
             }
             calculateTotals();
         }
@@ -2453,7 +2456,7 @@
                             `;
                         }
 
-                        pdCommentsList.innerHTML += `
+                        pdCommentsList.innerHTML += DOMPurify.sanitize(`
                             <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                     <div style="display: flex; align-items: center;">
@@ -2464,7 +2467,7 @@
                                 </div>
                                 <p style="margin: 0; color: var(--text-dark); font-size: 14px; line-height: 1.5;">${escapeHTML(c.text)}</p>
                             </div>
-                        `;
+                        `, { ADD_ATTR: ['onclick'] });
                     });
                 } else {
                     pdCommentsList.innerHTML = `<div style="text-align: center; color: #94a3b8; font-size: 14px; padding: 20px 0;">لا توجد تعليقات بعد. كن أول من يعلق! 🌟</div>`;

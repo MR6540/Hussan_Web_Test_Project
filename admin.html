@@ -426,6 +426,8 @@
             object-fit: cover;
         }
     </style>
+    <!-- مكتبة DOMPurify للأمان ضد XSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js" integrity="sha384-cwS6YdhLI7XS60eoDiC+egV0qHp8zI+Cms46R0nbn8JrmoAzV9uFL60etMZhAnSu" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -828,7 +830,7 @@
                             const safeName = String(mainCategories[key].name).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                             parentOptions += `<option value="${key}">${safeName}</option>`;
                         }
-                        parentCatSelect.innerHTML = parentOptions;
+                        parentCatSelect.innerHTML = DOMPurify.sanitize(parentOptions);
 
                         // 2. تعبئة جدول الفئات والقائمة المنسدلة للمنتجات
                         let optionsHTML = '<option value="">اختر الفئة...</option>';
@@ -838,14 +840,14 @@
                             const safeMainName = String(mainCat.name).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
                             // إضافة الفئة الأساسية للجدول
-                            categoriesTableBody.innerHTML += `
+                            categoriesTableBody.innerHTML += DOMPurify.sanitize(`
                                 <tr style="background-color: #f8fafc;">
                                     <td><strong style="color: var(--primary-color);">${safeMainName}</strong> <span class="badge-category" style="margin-right: 10px;">فئة أساسية</span></td>
                                     <td>
                                         <button class="btn-action btn-danger" onclick="deleteCategory('${mainKey}')">حذف <i class="fa-solid fa-trash"></i></button>
                                     </td>
                                 </tr>
-                            `;
+                            `, { ADD_ATTR: ['onclick'] });
 
                             // إضافة الفئة الأساسية لقائمة المنتجات (كـ مجموعة وخيار مستقل)
                             optionsHTML += `<optgroup label="[قسم] ${safeMainName}">`;
@@ -858,14 +860,14 @@
                                 if (subCat.parentId === mainKey || subCat.parentId === safeMainName) {
                                     const safeSubName = String(subCat.name).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-                                    categoriesTableBody.innerHTML += `
+                                    categoriesTableBody.innerHTML += DOMPurify.sanitize(`
                                         <tr>
                                             <td style="padding-right: 40px;">— ${safeSubName} <span class="badge-category" style="color: #f59e0b; border: 1px solid #f59e0b; background: transparent; margin-right: 10px;">فئة فرعية</span></td>
                                             <td>
                                                 <button class="btn-action btn-danger" onclick="deleteCategory('${subKey}')">حذف <i class="fa-solid fa-trash"></i></button>
                                             </td>
                                         </tr>
-                                    `;
+                                    `, { ADD_ATTR: ['onclick'] });
                                     optionsHTML += `<option value="${safeSubName}" data-parent="${mainKey}">${safeSubName}</option>`;
                                 }
                             }
@@ -876,19 +878,19 @@
                         for (let subKey in subCategories) {
                             if (!subCategories[subKey].parentId) {
                                 const safeSubName = String(subCategories[subKey].name).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                                categoriesTableBody.innerHTML += `
+                                categoriesTableBody.innerHTML += DOMPurify.sanitize(`
                                     <tr>
                                         <td>${safeSubName} <span class="badge-category" style="color: #f59e0b; border: 1px solid #f59e0b; background: transparent; margin-right: 10px;">فئة فرعية (بدون أب)</span></td>
                                         <td>
                                             <button class="btn-action btn-danger" onclick="deleteCategory('${subKey}')">حذف <i class="fa-solid fa-trash"></i></button>
                                         </td>
                                     </tr>
-                                `;
+                                `, { ADD_ATTR: ['onclick'] });
                                 optionsHTML += `<option value="${safeSubName}">${safeSubName}</option>`;
                             }
                         }
 
-                        prodCategory.innerHTML = optionsHTML;
+                        prodCategory.innerHTML = DOMPurify.sanitize(optionsHTML);
 
                     } else {
                         categoriesTableBody.innerHTML = `<tr><td colspan="2" style="text-align: center;">لا توجد فئات حالية. يرجى إضافة فئة.</td></tr>`;
@@ -922,7 +924,7 @@
                         const safeCat = escapeHTML(prod.category);
                         const safeDesc = escapeHTML(prod.desc);
 
-                        productsTableBody.innerHTML += `
+                        productsTableBody.innerHTML += DOMPurify.sanitize(`
                             <tr>
                                 <td>${mediaContent}</td>
                                 <td><strong>${safeTitle}</strong></td>
@@ -940,7 +942,7 @@
                                     </div>
                                 </td>
                             </tr>
-                        `;
+                        `, { ADD_ATTR: ['onclick'] });
                     }
                 } else {
                     productsTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">لا توجد منتجات حالية.</td></tr>`;
@@ -990,7 +992,7 @@
                         // إذا كان الطلب منجزاً (مؤرشف)
                         if (order.status === 'completed' || order.status === 'مكتمل') {
                             hasArchived = true;
-                            archivedOrdersListContainer.innerHTML += `
+                            archivedOrdersListContainer.innerHTML += DOMPurify.sanitize(`
                                 <div class="order-card" style="opacity: 0.8; border-color: #cbd5e1;">
                                     <div class="order-meta" style="background-color: #f8fafc; padding: 10px; border-radius: 8px;">
                                         <div>
@@ -1024,11 +1026,11 @@
                                         </table>
                                     </div>
                                 </div>
-                            `;
+                            `);
                         } else {
                             // إذا كان الطلب نشطاً (قيد المراجعة)
                             hasActive = true;
-                            ordersListContainer.innerHTML += `
+                            ordersListContainer.innerHTML += DOMPurify.sanitize(`
                                 <div class="order-card" id="order-${key}">
                                     <div class="order-meta">
                                         <div>
@@ -1070,7 +1072,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            `;
+                            `, { ADD_ATTR: ['onclick'] });
                         }
                     });
                 }

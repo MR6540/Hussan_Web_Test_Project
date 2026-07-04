@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم للمدير - حسن قدح</title>
+
+    <!-- خطوط جوجل (Tajawal) -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- مكتبة FontAwesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0ea5e9;
+            /* Sky Blue - Fresh Water & Soap Bubbles */
+            --primary-hover: #0284c7;
+            --secondary-bg: #f0f9ff;
+            /* Light Soft Sky Blue tint */
+            --text-dark: #0f172a;
+            /* Slate 900 for premium modern typography */
+            --text-muted: #64748b;
+            /* Slate 500 */
+            --border-color: #e2e8f0;
+            --accent-color: #10b981;
+            /* Sparkle Mint */
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --card-shadow: 0 10px 25px rgba(14, 165, 233, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: #f7fafc;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-color);
+            font-size: 22px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .btn-logout {
+            background-color: #fed7d7;
+            color: #c53030;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-logout:hover {
+            background-color: #feb2b2;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        .admin-header {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .admin-header h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        /* Tabs Menu */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--secondary-bg);
+            padding-bottom: 10px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-muted);
+            border-radius: 6px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--secondary-bg);
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Forms Layout & Styling */
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--secondary-bg);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            transition: var(--transition);
+            background-color: #fafbfc;
+            font-family: inherit;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            background-color: white;
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: fit-content;
+            margin-top: 15px;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Table & Lists */
+        .table-responsive {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--secondary-bg);
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        tr:hover td {
+            background-color: #fcfdfe;
+        }
+
+        .badge-category {
+            background-color: var(--secondary-bg);
+            color: var(--primary-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .btn-action {
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            transition: var(--transition);
+        }
+
+        .btn-danger {
+            background-color: #fed7d7;
+            color: var(--danger-color);
+        }
+
+        .btn-danger:hover {
+            background-color: #feb2b2;
+        }
+
+        .btn-success {
+            background-color: #c6f6d5;
+            color: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background-color: #9ae6b4;
+        }
+
+        /* Image Capture Control */
+        .image-upload-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .image-preview {
+            max-width: 120px;
+            max-height: 120px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            object-fit: cover;
+            display: none;
+        }
+
+        .custom-file-upload {
+            border: 2px dashed var(--primary-color);
+            display: inline-block;
+            padding: 15px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            text-align: center;
+            color: var(--primary-color);
+            font-weight: 700;
+            background-color: var(--secondary-bg);
+            transition: var(--transition);
+        }
+
+        .custom-file-upload:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .custom-file-upload i {
+            margin-left: 8px;
+            font-size: 18px;
+        }
+
+        /* Orders Box */
+        .order-card {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            background-color: white;
+        }
+
+        .order-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .order-id {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .order-customer {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .order-items-table {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .item-note {
+            font-size: 12px;
+            color: #a0522d;
+            font-style: italic;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .icon-preview-item {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: var(--secondary-bg);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+        }
+
+        .product-img-small {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- شريط التنقل العلوي -->
+    <nav class="navbar">
+        <a href="#" class="nav-logo">
+            <i class="fa-solid fa-pump-soap"></i>
+            <span>لوحة التحكم للمدير العام</span>
+        </a>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <a href="shopping.html" class="btn-logout"
+                style="background-color: #ebf8ff; color: #3182ce; text-decoration: none;">
+                <i class="fa-solid fa-store"></i> عرض المتجر للزبائن
+            </a>
+            <button class="btn-logout" id="logoutBtn">
+                تسجيل الخروج
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- ترويسة لوحة التحكم -->
+        <div class="admin-header">
+            <h1>أهلاً بك، المدير العام لمتجر حسن قدح</h1>
+        </div>
+
+        <!-- قائمة تبويبات لوحة التحكم -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('ordersTab')">
+                <i class="fa-solid fa-clipboard-list"></i> الطلبات الواردة
+            </button>
+            <button class="tab-btn" onclick="switchTab('productsTab')">
+                <i class="fa-solid fa-boxes-stacked"></i> إضافة وإدارة المنتجات
+            </button>
+            <button class="tab-btn" onclick="switchTab('categoriesTab')">
+                <i class="fa-solid fa-tags"></i> الفئات
+            </button>
+            <button class="tab-btn" onclick="switchTab('archiveTab')">
+                <i class="fa-solid fa-box-archive"></i> الأرشيف
+            </button>
+            <button class="tab-btn" onclick="switchTab('settingsTab')">
+                <i class="fa-solid fa-gears"></i> إعدادات حساب المدير
+            </button>
+        </div>
+
+        <!-- محتوى 1: الطلبات الواردة -->
+        <div id="ordersTab" class="tab-content active">
+            <div class="card">
+                <h2 class="card-title"><i class="fa-solid fa-bell"></i> الطلبات المستلمة</h2>
+                <div id="ordersListContainer">
+                    <p class="empty-cart-text" style="text-align: center; color: var(--text-muted);">لا توجد طلبات واردة
+                        حالياً.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- محتوى 2: إضافة وإدارة المنتجات -->
+        <div id="productsTab" class="tab-content">
+            <!-- نموذج إضافة منتج جديد -->
+            <div class="card">
+                <h2 class="card-title"><i class="fa-solid fa-plus-circle"></i> إضافة منتج جديد</h2>
+                <form id="productForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">اسم المنتج</label>
+                            <input type="text" id="prodTitle" class="form-control" placeholder="مثال: مطهر ومعقم سوبر"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">الوصف التفصيلي</label>
+                            <input type="text" id="prodDesc" class="form-control"
+                                placeholder="وصف استخدام المنتج وقوته..." required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">السعر (د.ع)</label>
+                            <input type="number" id="prodPrice" class="form-control" placeholder="5000" step="250"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">الفئة</label>
+                            <select id="prodCategory" class="form-control" required>
+                                <option value="">اختر الفئة...</option>
+                                <!-- يتم تعبئتها ديناميكياً -->
+                            </select>
+                        </div>
+
+                        <div style="display: flex; gap: 15px; align-items: stretch; grid-column: 1 / -1; flex-wrap: nowrap;">
+                            <div class="form-group image-upload-wrapper" style="flex: 1; margin: 0; display: flex; flex-direction: column; justify-content: flex-end;">
+                                <label class="form-label">صورة المنتج (المعرض أو الكاميرا)</label>
+                                <!-- حقل يتيح التقاط صورة بالكاميرا فوراً في الموبايل أو اختيار ملف بالكمبيوتر -->
+                                <label for="prodImage" class="custom-file-upload" style="margin: 0; height: 48px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i> اختر صورة
+                                </label>
+                                <input type="file" id="prodImage" accept="image/*"
+                                    style="display: none;">
+                                <img id="imagePreview" class="image-preview" src="#" alt="معاينة الصورة"
+                                    style="margin-top: 10px; max-height: 80px; align-self: center;">
+                            </div>
+                            
+                            <div style="flex: 1; display: flex; gap: 10px; align-items: flex-end; margin: 0;">
+                                <button type="submit" class="btn-submit" id="submitProductBtn" style="flex: 1; margin: 0; height: 48px; display: flex; align-items: center; justify-content: center;">
+                                    حفظ المادة
+                                    <i class="fa-solid fa-floppy-disk" style="margin-right: 5px;"></i>
+                                </button>
+                                <button type="button" class="btn-action btn-danger" id="cancelEditBtn" style="display: none; height: 48px; padding: 0 15px; border-radius: 8px;">
+                                    إلغاء <i class="fa-solid fa-xmark" style="margin-right: 5px;"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- قائمة المنتجات المضافة وحذفها -->
+            <div class="card">
+                <h2 class="card-title"><i class="fa-solid fa-list"></i> قائمة المنتجات الحالية</h2>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الصورة</th>
+                                <th>اسم المنتج</th>
+                                <th>الفئة</th>
+                                <th>الوصف</th>
+                                <th>السعر</th>
+                                <th>العمليات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                            <!-- سيتم تعبئتها برمجياً -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- محتوى 3: إدارة الفئات -->
+        <div id="categoriesTab" class="tab-content">
+            <div class="card">
+                <h2 class="card-title"><i class="fa-solid fa-folder-plus"></i> إضافة فئة جديدة للمنتجات</h2>
+                <form id="categoryForm">
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="display: flex; gap: 10px; flex-wrap: nowrap; overflow-x: auto; align-items: center; padding-bottom: 5px;">
+                            <input type="text" id="catName" class="form-control" style="flex: 1; min-width: 150px; margin: 0;"
+                                placeholder="اسم الفئة الجديدة" required>
+                            
+                            <select id="catType" class="form-control" style="flex: 1; min-width: 120px; margin: 0;" required>
+                                <option value="main">فئة أساسية</option>
+                                <option value="sub">فئة فرعية</option>
+                            </select>
+                            
+                            <select id="parentCat" class="form-control" style="flex: 1; min-width: 120px; margin: 0; display: none;">
+                                <option value="">الفئة الأساسية...</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-submit" style="margin: 0; align-self: center; padding: 12px 30px; width: 100%; max-width: 300px;">
+                            إضافة الفئة <i class="fa-solid fa-layer-group"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title"><i class="fa-solid fa-folder-open"></i> الفئات الحالية</h2>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم الفئة</th>
+                                <th>العمليات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoriesTableBody">
+                            <!-- سيتم تعبئتها برمجياً -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- محتوى الأرشيف -->
+        <div id="archiveTab" class="tab-content">
+            <div class="card">
+                <h2 class="card-title"><i class="fa-solid fa-box-archive"></i> الطلبات المنجزة (الأرشيف)</h2>
+                <div id="archivedOrdersListContainer">
+                    <p class="empty-cart-text" style="text-align: center; color: var(--text-muted);">لا توجد طلبات
+                        مؤرشفة حالياً.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- محتوى 4: إعدادات حساب المدير -->
+        <div id="settingsTab" class="tab-content">
+            <div class="card">
+                <h2 class="card-title"><i class="fa-solid fa-user-lock"></i> تغيير الحساب الإلكتروني للمدير</h2>
+                <div
+                    style="background-color: #fffaf0; border-right: 4px solid #dd6b20; padding: 12px; margin-bottom: 20px; font-size: 13px; color: #a0522d; border-radius: 4px;">
+                    ⚠️ <strong>تنبيه هام جداً:</strong> عند تغيير البريد الإلكتروني للآدمن، يرجى التأكد من تسجيل حساب
+                    بنفس هذا البريد الجديد في صفحة التسجيل (Sign Up) أولاً، حتى تتمكن من تسجيل الدخول به كآدمن لاحقاً
+                    وعدم إقفال حسابك!
+                </div>
+                <form id="adminSettingsForm">
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label class="form-label">البريد الإلكتروني الحالي/الجديد للآدمن</label>
+                        <input type="email" id="adminEmailInput" class="form-control"
+                            placeholder="hqdh706@gmail.com" required>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        تحديث البريد الإلكتروني للمدير
+                        <i class="fa-solid fa-user-check"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- كود الجافا سكريبت ولوجيك لوحة التحكم -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, get, child, remove, update, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // إعدادات الفايربيس
+        const firebaseConfig = {
+            apiKey: "AIzaSyAK-KCzIJ7MRLa27c59LTjtzvxLl5CR8qw",
+            authDomain: "hussanali.firebaseapp.com",
+            databaseURL: "https://hussanali-default-rtdb.firebaseio.com",
+            projectId: "hussanali",
+            storageBucket: "hussanali.firebasestorage.app",
+            messagingSenderId: "461130499187",
+            appId: "1:461130499187:web:18f8704764934b1865d606",
+            measurementId: "G-96DMP7DXK9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        // وظيفة مساعدة لمنع XSS
+        function escapeHTML(str) {
+            if (typeof str !== 'string') return str;
+            return str.replace(/[&<>'"]/g, function(tag) {
+                const charsToReplace = { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' };
+                return charsToReplace[tag] || tag;
+            });
+        }
+
+        // متغيرات عامة
+        let currentAdminEmail = "hqdh706@gmail.com";
+        let base64Image = "";
+
+        // عناصر الصور والمعاينة
+        const prodImage = document.getElementById('prodImage');
+        const imagePreview = document.getElementById('imagePreview');
+
+        // --- 1. فحص الوصول وحماية صفحة المدير (Security and Access Control) ---
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // حفظ أمر الإتمام إذا كان قادماً من تليجرام قبل طرده لصفحة الدخول
+                if (window.location.search.includes('action=complete')) {
+                    localStorage.setItem('pendingTelegramAction', window.location.search);
+                }
+                window.location.href = "hussainkd7.html";
+            } else {
+                if (user.email && user.email.toLowerCase() === "hqdh706@gmail.com") {
+                    document.getElementById('adminEmailInput').value = "hqdh706@gmail.com";
+                    loadAllData();
+                    return;
+                }
+                // جلب بريد الآدمن المعتمد حالياً من قاعدة البيانات
+                const adminRef = ref(database, 'adminConfig');
+                get(adminRef).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        currentAdminEmail = snapshot.val().adminEmail || "hqdh706@gmail.com";
+                    }
+
+                    // إذا لم يكن الحساب هو حساب المدير، يطرده لصفحة تسجيل الدخول
+                    if (user.email !== currentAdminEmail && user.email !== "hqdh706@gmail.com") {
+                        if (window.location.search.includes('action=complete')) {
+                            localStorage.setItem('pendingTelegramAction', window.location.search);
+                        }
+                        alert("غير مصرح لك بدخول هذه الصفحة! يتم تحويلك الآن.");
+                        window.location.href = "hussainkd7.html";
+                    } else {
+                        document.getElementById('adminEmailInput').value = "hqdh706@gmail.com";
+                        // استدعاء البيانات إذا كان هو الآدمن الفعلي
+                        loadAllData();
+                    }
+                }).catch(() => {
+                    // حماية احتياطية في حال تعذر الاتصال
+                    if (user.email !== "hqdh706@gmail.com") {
+                        window.location.href = "hussainkd7.html";
+                    }
+                });
+            }
+        });
+
+        // تسجيل الخروج
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                window.location.href = "hussainkd7.html";
+            });
+        });
+
+        // --- 2. معالجة معاينة وتحويل الصورة الملتقطة بالكاميرا أو المعرض ---
+        prodImage.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    base64Image = e.target.result;
+                    imagePreview.src = base64Image;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // --- 3. جلب وتحميل البيانات ديناميكياً ---
+        function checkTelegramAutoAction() {
+            let searchString = window.location.search;
+            
+            // استعادة الأمر إذا كان محفوظاً قبل تسجيل الدخول
+            if (!searchString && localStorage.getItem('pendingTelegramAction')) {
+                searchString = localStorage.getItem('pendingTelegramAction');
+                localStorage.removeItem('pendingTelegramAction');
+            }
+
+            const urlParams = new URLSearchParams(searchString);
+            const action = urlParams.get('action');
+            const orderId = urlParams.get('id');
+            const uid = urlParams.get('uid');
+            
+            if (action === 'complete' && orderId) {
+                // إزالة الرابط من المتصفح لمنع التكرار عند التحديث
+                window.history.replaceState({}, document.title, window.location.pathname);
+                
+                get(ref(database, 'orders/' + orderId)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const orderData = snapshot.val();
+                        if (orderData.status === 'completed') {
+                            alert('هذا الطلب تم إتمامه مسبقاً!');
+                            return;
+                        }
+                        
+                        orderData.archivedAt = new Date().toLocaleString(); 
+                        orderData.status = 'completed';
+
+                        update(ref(database, 'orders/' + orderId), { status: 'completed', archivedAt: orderData.archivedAt }).then(() => {
+                            alert('✅ تم إتمام الطلب وأرشفته بنجاح عبر تليجرام!');
+                            if (uid && uid !== 'null' && uid !== 'undefined') {
+                                const notifRef = push(ref(database, 'notifications/' + uid));
+                                set(notifRef, {
+                                    message: 'تم إتمام وتجهيز طلبك رقم #' + (orderData.orderNumber || orderId.replace('O_', '')) + ' بنجاح! شكراً لتسوقك معنا.',
+                                    timestamp: new Date().toLocaleString(),
+                                    read: false
+                                });
+                            }
+                        }).catch(err => {
+                            alert('فشل إتمام الطلب: ' + err.message);
+                        });
+                    }
+                });
+            }
+        }
+
+        function loadAllData() {
+            checkTelegramAutoAction(); // تنفيذ الحيلة بمجرد تحميل لوحة التحكم
+
+            // أ) جلب الفئات
+            onValue(ref(database, 'categories'), (snapshot) => {
+                try {
+                    const categoriesTableBody = document.getElementById('categoriesTableBody');
+                    const prodCategory = document.getElementById('prodCategory');
+                    const parentCatSelect = document.getElementById('parentCat');
+
+                    categoriesTableBody.innerHTML = '';
+
+                    let mainCategories = {};
+                    let subCategories = {};
+
+                    if (snapshot.exists()) {
+                        const categories = snapshot.val();
+
+                        // الفصل بين الأساسي والفرعي
+                        for (let key in categories) {
+                            if (categories[key] && categories[key].type === 'main') {
+                                mainCategories[key] = categories[key];
+                            } else if (categories[key]) {
+                                subCategories[key] = categories[key];
+                            }
+                        }
+
+                        // 1. تعبئة قائمة اختيار الفئة الأساسية (عند إضافة فئة فرعية جديدة)
+                        let parentOptions = '<option value="">اختر الفئة الأساسية...</option>';
+                        for (let key in mainCategories) {
+                            const safeName = String(mainCategories[key].name).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                            parentOptions += `<option value="${key}">${safeName}</option>`;
+                        }
+                        parentCatSelect.innerHTML = parentOptions;
+
+                        // 2. تعبئة جدول الفئات والقائمة المنسدلة للمنتجات
+                        let optionsHTML = '<option value="">اختر الفئة...</option>';
+
+                        for (let mainKey in mainCategories) {
+                            const mainCat = mainCategories[mainKey];
+                            const safeMainName = String(mainCat.name).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+                            // إضافة الفئة الأساسية للجدول
+                            categoriesTableBody.innerHTML += `
+                                <tr style="background-color: #f8fafc;">
+                                    <td><strong style="color: var(--primary-color);">${safeMainName}</strong> <span class="badge-category" style="margin-right: 10px;">فئة أساسية</span></td>
+                                    <td>
+                                        <button class="btn-action btn-danger" onclick="deleteCategory('${mainKey}')">حذف <i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            `;
+
+                            // إضافة الفئة الأساسية لقائمة المنتجات (كـ مجموعة وخيار مستقل)
+                            optionsHTML += `<optgroup label="[قسم] ${safeMainName}">`;
+                            // إضافة الفئة الأساسية كخيار يمكن اختياره مباشرة للمواد التي ليس لها فئة فرعية
+                            optionsHTML += `<option value="${safeMainName}" style="font-weight:bold; color:var(--primary-color);">● وضع المادة في ( ${safeMainName} ) مباشرة</option>`;
+
+                            // البحث عن الفئات الفرعية التابعة لهذه الفئة الأساسية
+                            for (let subKey in subCategories) {
+                                const subCat = subCategories[subKey];
+                                if (subCat.parentId === mainKey || subCat.parentId === safeMainName) {
+                                    const safeSubName = String(subCat.name).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+                                    categoriesTableBody.innerHTML += `
+                                        <tr>
+                                            <td style="padding-right: 40px;">— ${safeSubName} <span class="badge-category" style="color: #f59e0b; border: 1px solid #f59e0b; background: transparent; margin-right: 10px;">فئة فرعية</span></td>
+                                            <td>
+                                                <button class="btn-action btn-danger" onclick="deleteCategory('${subKey}')">حذف <i class="fa-solid fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    optionsHTML += `<option value="${safeSubName}" data-parent="${mainKey}">${safeSubName}</option>`;
+                                }
+                            }
+                            optionsHTML += `</optgroup>`;
+                        }
+
+                        // الفئات الفرعية القديمة أو التي بدون أب
+                        for (let subKey in subCategories) {
+                            if (!subCategories[subKey].parentId) {
+                                const safeSubName = String(subCategories[subKey].name).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                                categoriesTableBody.innerHTML += `
+                                    <tr>
+                                        <td>${safeSubName} <span class="badge-category" style="color: #f59e0b; border: 1px solid #f59e0b; background: transparent; margin-right: 10px;">فئة فرعية (بدون أب)</span></td>
+                                        <td>
+                                            <button class="btn-action btn-danger" onclick="deleteCategory('${subKey}')">حذف <i class="fa-solid fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                `;
+                                optionsHTML += `<option value="${safeSubName}">${safeSubName}</option>`;
+                            }
+                        }
+
+                        prodCategory.innerHTML = optionsHTML;
+
+                    } else {
+                        categoriesTableBody.innerHTML = `<tr><td colspan="2" style="text-align: center;">لا توجد فئات حالية. يرجى إضافة فئة.</td></tr>`;
+                        prodCategory.innerHTML = '<option value="">اختر الفئة...</option>';
+                        parentCatSelect.innerHTML = '<option value="">اختر الفئة الأساسية...</option>';
+                    }
+                } catch (error) {
+                    console.error("Error in categories: ", error);
+                }
+            });
+
+            // ب) جلب المنتجات
+            onValue(ref(database, 'products'), (snapshot) => {
+                const productsTableBody = document.getElementById('productsTableBody');
+                productsTableBody.innerHTML = '';
+
+                if (snapshot.exists()) {
+                    const productsList = snapshot.val();
+                    allProductsData = productsList; // تخزين البيانات محلياً للتعديل
+                    for (let key in productsList) {
+                        const prod = productsList[key];
+                        let mediaContent = '';
+
+                        if (prod.image) {
+                            mediaContent = `<img src="${prod.image}" class="product-img-small" alt="صورة">`;
+                        } else {
+                            mediaContent = `<div class="icon-preview-item" style="font-size: 10px;">لا صورة</div>`;
+                        }
+
+                        const safeTitle = escapeHTML(prod.title);
+                        const safeCat = escapeHTML(prod.category);
+                        const safeDesc = escapeHTML(prod.desc);
+
+                        productsTableBody.innerHTML += `
+                            <tr>
+                                <td>${mediaContent}</td>
+                                <td><strong>${safeTitle}</strong></td>
+                                <td><span class="badge-category">${safeCat}</span></td>
+                                <td style="font-size: 12px; color: var(--text-muted);">${safeDesc}</td>
+                                <td><strong>${parseFloat(prod.price).toLocaleString()} د.ع</strong></td>
+                                <td>
+                                    <div style="display: flex; gap: 5px;">
+                                        <button class="btn-action" style="background-color: #f1f5f9; color: #475569;" onclick="editProduct('${key}')">
+                                            تعديل <i class="fa-solid fa-pen"></i>
+                                        </button>
+                                        <button class="btn-action btn-danger" onclick="deleteProduct('${key}')">
+                                            حذف <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    }
+                } else {
+                    productsTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">لا توجد منتجات حالية.</td></tr>`;
+                }
+            });
+
+            // جلب وعرض كل الطلبات (الواردة والمؤرشفة) من مسار واحد لضمان الدقة وتفادي أي ضياع
+            onValue(ref(database, 'orders'), (snapshot) => {
+                const archivedOrdersListContainer = document.getElementById('archivedOrdersListContainer');
+                const ordersListContainer = document.getElementById('ordersListContainer');
+                
+                archivedOrdersListContainer.innerHTML = '';
+                ordersListContainer.innerHTML = '';
+
+                let hasArchived = false;
+                let hasActive = false;
+
+                if (snapshot.exists()) {
+                    const orders = snapshot.val();
+                    const orderKeys = Object.keys(orders).reverse();
+
+                    orderKeys.forEach(key => {
+                        const order = orders[key];
+                        const currentSeconds = Math.floor(Date.now() / 1000);
+                        
+                        // حذف الطلبات المعلقة جداً أو المؤرشفة جداً (أكثر من 30 يوماً) لتنظيف القاعدة
+                        if (order.orderNumber && (currentSeconds - order.orderNumber) > (30 * 24 * 60 * 60)) {
+                            remove(ref(database, 'orders/' + key));
+                            return;
+                        }
+
+                        let itemsRows = '';
+                        if (order.items && Array.isArray(order.items)) {
+                            order.items.forEach(item => {
+                                let noteText = item.note ? `<span class="item-note">💡 ملاحظة الزبون: ${item.note}</span>` : '<span class="item-note" style="color:#aaa;">لا توجد ملاحظات</span>';
+                                itemsRows += `
+                                    <tr>
+                                        <td>${item.title || item.name} ${noteText}</td>
+                                        <td>${item.qty || item.quantity}</td>
+                                        <td>${parseFloat(item.price).toLocaleString()} د.ع</td>
+                                        <td>${(item.price * (item.qty || item.quantity)).toLocaleString()} د.ع</td>
+                                    </tr>
+                                `;
+                            });
+                        }
+
+                        // إذا كان الطلب منجزاً (مؤرشف)
+                        if (order.status === 'completed' || order.status === 'مكتمل') {
+                            hasArchived = true;
+                            archivedOrdersListContainer.innerHTML += `
+                                <div class="order-card" style="opacity: 0.8; border-color: #cbd5e1;">
+                                    <div class="order-meta" style="background-color: #f8fafc; padding: 10px; border-radius: 8px;">
+                                        <div>
+                                            <span class="order-id" style="color: #64748b;">طلب رقم: #${(order.orderNumber || key.replace('O_', '')).toString().toUpperCase()} (مؤرشف)</span> | 
+                                            <span class="order-customer">الزبون: ${order.customerName || order.email || 'زائر مجهول'}</span>
+                                        </div>
+                                        <div>
+                                            <span class="order-customer" style="margin-left: 15px;"><i class="fa-regular fa-clock"></i> وقت الطلب: ${order.timestamp}</span>
+                                            <span class="order-customer" style="color: var(--success-color); font-weight: bold;"><i class="fa-solid fa-check"></i> أُنجز في: ${order.archivedAt || 'غير محدد'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="order-items-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>المنتج وملاحظة العميل</th>
+                                                    <th>الكمية</th>
+                                                    <th>السعر المفرد</th>
+                                                    <th>الإجمالي</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${itemsRows}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="3" style="text-align: left; font-weight: bold;">المجموع الكلي:</td>
+                                                    <td style="font-weight: bold; color: var(--primary-color);">${parseFloat(order.totalPrice || order.total || 0).toLocaleString()} د.ع</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            // إذا كان الطلب نشطاً (قيد المراجعة)
+                            hasActive = true;
+                            ordersListContainer.innerHTML += `
+                                <div class="order-card" id="order-${key}">
+                                    <div class="order-meta">
+                                        <div>
+                                            <span class="order-id">طلب رقم: #${(order.orderNumber || key.replace('O_', '')).toString().toUpperCase()}</span> | 
+                                            <span class="order-customer">الزبون: ${order.customerName || order.email || 'زائر مجهول'} (الهاتف: ${order.phone || 'غير متوفر'})</span>
+                                        </div>
+                                        <div>
+                                            <span class="order-customer" style="margin-left: 15px;"><i class="fa-regular fa-clock"></i> ${order.timestamp}</span>
+                                            <div style="margin-top: 5px; color: #475569; font-size: 14px;">
+                                                📍 <span style="font-weight:bold;">الاستلام:</span> ${order.approxLocation || 'لم يحدد'} | 
+                                                🗺️ <a href="${order.exactLocation}" target="_blank" style="color:var(--primary-color);">فتح الـ GPS</a>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button class="btn-action btn-success" onclick="completeOrder('${key}', '${order.uid}')">
+                                                إتمام الطلب <i class="fa-solid fa-circle-check"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="order-items-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>المنتج وملاحظة العميل</th>
+                                                    <th>الكمية</th>
+                                                    <th>السعر المفرد</th>
+                                                    <th>الإجمالي</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${itemsRows}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="3" style="text-align: left; font-weight: bold;">المجموع الكلي:</td>
+                                                    <td style="font-weight: bold; color: var(--primary-color);">${parseFloat(order.totalPrice || order.total || 0).toLocaleString()} د.ع</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+
+                if (!hasArchived) {
+                    archivedOrdersListContainer.innerHTML = `<p class="empty-cart-text" style="text-align: center; color: var(--text-muted);">لا توجد طلبات مؤرشفة حالياً.</p>`;
+                }
+                if (!hasActive) {
+                    ordersListContainer.innerHTML = `<p class="empty-cart-text" style="text-align: center; color: var(--text-muted);">لا توجد طلبات واردة حالياً.</p>`;
+                }
+            });
+        }
+
+        // --- 4. العمليات التفاعلية (إضافة وحذف) ---
+
+        // التحكم في ظهور الفئة الأساسية عند اختيار "فئة فرعية"
+        document.getElementById('catType').addEventListener('change', (e) => {
+            const parentCatSelect = document.getElementById('parentCat');
+            if (e.target.value === 'sub') {
+                parentCatSelect.style.display = 'block';
+                parentCatSelect.required = true;
+            } else {
+                parentCatSelect.style.display = 'none';
+                parentCatSelect.required = false;
+                parentCatSelect.value = '';
+            }
+        });
+
+        // أ) إضافة فئة
+        document.getElementById('categoryForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const catName = document.getElementById('catName').value.trim();
+            const catType = document.getElementById('catType').value;
+            const parentCat = document.getElementById('parentCat').value;
+
+            const catRef = push(ref(database, 'categories')); // استخدام push لإنشاء معرف فريد بشكل صحيح
+            set(catRef, { name: catName, type: catType, parentId: parentCat || null })
+                .then(() => {
+                    alert('تم إضافة الفئة بنجاح!');
+                    document.getElementById('catName').value = '';
+                    document.getElementById('parentCat').value = '';
+                })
+                .catch((error) => {
+                    console.error("Error adding category:", error);
+                    alert('عذراً، حدث خطأ أثناء الحفظ: ' + error.message);
+                });
+        });
+
+        // ب) حذف فئة
+        window.deleteCategory = function (key) {
+            if (confirm('هل أنت متأكد من رغبتك في حذف هذه الفئة؟')) {
+                remove(ref(database, 'categories/' + key))
+                    .then(() => {
+                        alert('تم حذف الفئة.');
+                    })
+                    .catch((error) => {
+                        alert('حدث خطأ أثناء الحذف: ' + error.message);
+                    });
+            }
+        };
+
+        // متغيرات التعديل
+        let editingProductId = null;
+        let allProductsData = {};
+
+        // ج) إضافة / تعديل منتج
+        document.getElementById('productForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('prodTitle').value.trim();
+            const desc = document.getElementById('prodDesc').value.trim();
+            const price = parseFloat(document.getElementById('prodPrice').value);
+            const category = document.getElementById('prodCategory').value;
+
+            const productData = {
+                title: title,
+                desc: desc,
+                price: price,
+                category: category,
+                image: base64Image, // يتم حفظ ملف الصورة المأخوذة بالكاميرا أو المعرض كـ Base64
+                createdAt: Date.now() // تاريخ الإضافة لمعرفة المنتجات الجديدة
+            };
+
+            if (editingProductId) {
+                // وضع التعديل
+                // إذا لم يختر صورة جديدة، احتفظ بالصورة القديمة
+                if (!base64Image) {
+                    productData.image = allProductsData[editingProductId].image || '';
+                }
+                
+                update(ref(database, 'products/' + editingProductId), productData)
+                    .then(() => {
+                        alert('تم تعديل المنتج بنجاح!');
+                        resetProductForm();
+                    })
+                    .catch((err) => {
+                        alert('فشل التعديل: ' + err.message);
+                    });
+            } else {
+                // وضع الإضافة
+                const productRef = push(ref(database, 'products')); // استخدام push لإنشاء معرف للمنتج
+                set(productRef, productData)
+                    .then(() => {
+                        alert('تم إضافة المنتج بنجاح وأمان في قاعدة البيانات!');
+                        resetProductForm();
+                    })
+                    .catch((err) => {
+                        alert('فشلت الإضافة: ' + err.message);
+                    });
+            }
+        });
+
+        // تفعيل وضع التعديل
+        window.editProduct = function (key) {
+            const prod = allProductsData[key];
+            if (!prod) return;
+
+            editingProductId = key;
+            document.getElementById('prodTitle').value = prod.title || '';
+            document.getElementById('prodDesc').value = prod.desc || '';
+            document.getElementById('prodPrice').value = prod.price || '';
+            document.getElementById('prodCategory').value = prod.category || '';
+            
+            if (prod.image) {
+                imagePreview.src = prod.image;
+                imagePreview.style.display = 'block';
+                base64Image = prod.image; // الاحتفاظ بالصورة كقيمة افتراضية
+            } else {
+                imagePreview.src = '#';
+                imagePreview.style.display = 'none';
+                base64Image = '';
+            }
+
+            // تغيير شكل زر الحفظ
+            document.getElementById('submitProductBtn').innerHTML = 'حفظ التعديلات <i class="fa-solid fa-check-double"></i>';
+            document.getElementById('submitProductBtn').style.backgroundColor = '#10b981';
+            document.getElementById('cancelEditBtn').style.display = 'block';
+
+            // التمرير لأعلى الصفحة لتعديل البيانات
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // إلغاء وضع التعديل
+        document.getElementById('cancelEditBtn').addEventListener('click', () => {
+            resetProductForm();
+        });
+
+        function resetProductForm() {
+            editingProductId = null;
+            document.getElementById('productForm').reset();
+            imagePreview.style.display = 'none';
+            imagePreview.src = '#';
+            base64Image = "";
+            document.getElementById('submitProductBtn').innerHTML = 'حفظ وإضافة المنتج <i class="fa-solid fa-floppy-disk"></i>';
+            document.getElementById('submitProductBtn').style.backgroundColor = 'var(--primary-color)';
+            document.getElementById('cancelEditBtn').style.display = 'none';
+        }
+
+        // د) حذف منتج
+        window.deleteProduct = function (key) {
+            if (confirm('هل أنت متأكد من رغبتك في حذف هذا المنتج؟')) {
+                remove(ref(database, 'products/' + key)).then(() => {
+                    alert('تم حذف المنتج.');
+                });
+            }
+        };
+
+        // هـ) إتمام/أرشفة الطلب
+        window.completeOrder = function (key, uid) {
+            if (confirm('هل تريد أرشفة وإتمام هذا الطلب؟')) {
+                get(ref(database, 'orders/' + key)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const orderData = snapshot.val();
+                        orderData.archivedAt = new Date().toLocaleString(); 
+                        orderData.status = 'completed';
+
+                        // 1. تحديث حالة الطلب فقط (سيعرض تلقائياً في الأرشيف)
+                        update(ref(database, 'orders/' + key), { status: 'completed', archivedAt: orderData.archivedAt }).then(() => {
+                            alert('تم إتمام الطلب بنجاح ونقله للأرشيف.');
+
+                            // 2. إرسال إشعار للمستخدم
+                            if (uid) {
+                                const notifRef = push(ref(database, 'notifications/' + uid));
+                                set(notifRef, {
+                                    message: 'تم إتمام وتجهيز طلبك رقم #' + (orderData.orderNumber || key.replace('O_', '')) + ' بنجاح! شكراً لتسوقك معنا.',
+                                    timestamp: new Date().toLocaleString(),
+                                    read: false
+                                });
+                            }
+                        }).catch((err) => {
+                            alert('فشلت عملية الإتمام: ' + err.message);
+                        });
+                    }
+                });
+            }
+        };
+
+        // و) تحديث بريد الآدمن في الإعدادات لتغييره لاحقاً
+        document.getElementById('adminSettingsForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newAdminEmail = document.getElementById('adminEmailInput').value.trim();
+
+            update(ref(database, 'adminConfig'), { adminEmail: newAdminEmail })
+                .then(() => {
+                    alert('تم تحديث بريد الآدمن بنجاح! سيتم توجيه هذا البريد لصفحة الإدارة في المرة القادمة.');
+                })
+                .catch((err) => {
+                    alert('فشل التحديث: ' + err.message);
+                });
+        });
+
+        // --- 5. تبديل التبويبات تفاعلياً ---
+        window.switchTab = function (tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        };
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - حسن قدح</title>
+    
+    <!-- خطوط جوجل (Tajawal) لدعم اللغة العربية بشكل أنيق -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- مكتبة FontAwesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0ea5e9; /* Sky Blue - Fresh Water & Soap Bubbles */
+            --primary-hover: #0284c7;
+            --secondary-bg: #f0f9ff; /* Light Soft Sky Blue tint */
+            --text-dark: #0f172a; /* Slate 900 for premium modern typography */
+            --text-muted: #64748b; /* Slate 500 */
+            --border-color: #e2e8f0;
+            --input-bg: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #f0f9ff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden; /* تم تغييرها من hidden للسماح بالتمرير العمودي */
+            position: relative;
+        }
+
+        /* Bubble Elements for a fresh cleaning feel */
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(14, 165, 233, 0.08) 70%);
+            z-index: 0;
+            pointer-events: none;
+            animation: bubbleFloat 10s ease-in-out infinite alternate;
+        }
+
+        body::before {
+            top: 10%;
+            left: 10%;
+            width: 180px;
+            height: 180px;
+        }
+
+        body::after {
+            bottom: 15%;
+            right: 8%;
+            width: 120px;
+            height: 120px;
+            animation-delay: -5s;
+        }
+
+        @keyframes bubbleFloat {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            100% { transform: translate(30px, -40px) scale(1.1) rotate(45deg); }
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Logo Area */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .logo-circle {
+            width: 75px;
+            height: 75px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 30px;
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            animation: floatLogo 4s ease-in-out infinite;
+        }
+
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .title {
+            color: #0369a1;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* Form Groups */
+        .form-group {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .forgot-password {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .forgot-password:hover {
+            color: var(--primary-color);
+        }
+
+        /* Inputs */
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon-right {
+            position: absolute;
+            right: 15px;
+            color: var(--text-muted);
+        }
+
+        .input-icon-left {
+            position: absolute;
+            left: 15px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .input-icon-left:hover {
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 45px 12px 45px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background-color: var(--input-bg);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+            color: var(--text-dark);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 25px;
+            gap: 8px;
+        }
+
+        .checkbox-group input {
+            accent-color: var(--primary-color);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            font-size: 13px;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-bg);
+            color: #0284c7;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0f2fe;
+            transform: translateY(-1px);
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .divider:not(:empty)::before {
+            margin-left: .25em;
+        }
+
+        .divider:not(:empty)::after {
+            margin-right: .25em;
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.3);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(6px);
+        }
+
+        .modal-card {
+            background-color: white;
+            width: 95%;
+            max-width: 450px;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            text-align: right;
+            animation: modalScale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid var(--border-color);
+        }
+
+        @keyframes modalScale {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0369a1;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-bg);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn:disabled {
+            background: #cbd5e1;
+            color: #94a3b8;
+            cursor: not-allowed;
+            opacity: 0.8;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <!-- الهيدر واللوجو -->
+        <div class="logo-container">
+            <div class="logo-circle">
+                <i class="fa-solid fa-pump-soap"></i>
+            </div>
+        </div>
+        <h1 class="title">حسن قدح</h1>
+        <p class="subtitle">عالم من النظافة واللمعان</p>
+
+        <!-- نموذج تسجيل الدخول -->
+        <form id="loginForm">
+            
+            <!-- حقل البريد الإلكتروني -->
+            <div class="form-group">
+                <div class="form-header">
+                    <label class="form-label">البريد الإلكتروني</label>
+                </div>
+                <div class="input-wrapper">
+                    <i class="fa-regular fa-envelope input-icon-right"></i>
+                    <input type="email" id="usernameInput" class="form-control" placeholder="example@gmail.com" required>
+                </div>
+            </div>
+
+            <!-- حقل كلمة المرور -->
+            <div class="form-group" style="margin-bottom: 5px;">
+                <div style="text-align: right; margin-bottom: 8px;">
+                    <label class="form-label">كلمة المرور</label>
+                </div>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock input-icon-right"></i>
+                    <input type="password" id="passwordInput" class="form-control" placeholder="........" required>
+                    <i class="fa-regular fa-eye input-icon-left" id="togglePassword"></i>
+                </div>
+                <div style="text-align: left; margin-top: 8px; margin-bottom: 15px;">
+                    <a href="#" class="forgot-password" id="forgotPasswordBtn" style="color: var(--primary-color); text-decoration: none; font-size: 13px;">نسيت كلمة المرور؟</a>
+                </div>
+            </div>
+
+            <!-- تذكرني -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="rememberMe">
+                <label for="rememberMe" class="checkbox-label">تذكرني على هذا الجهاز</label>
+            </div>
+
+            <!-- زر الدخول -->
+            <button type="submit" class="btn btn-primary" id="loginBtn">
+                تسجيل الدخول
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
+
+            <!-- زر التسجيل عبر جوجل -->
+            <button type="button" id="googleBtn" class="btn" style="background-color: white; color: #444; border: 1px solid var(--border-color); margin-top: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width: 22px;" alt="Google">
+                المتابعة باستخدام حساب جوجل
+            </button>
+
+            <!-- فاصل -->
+            <div class="divider">أو</div>
+
+            <!-- الدخول كزائر -->
+            <button type="button" id="guestBtn" class="btn btn-secondary">
+                الدخول كزائر
+                <i class="fa-solid fa-user-group"></i>
+            </button>
+
+            <!-- زر إنشاء حساب جديد -->
+            <button type="button" class="btn" style="background-color: #f8fafc; color: var(--primary-color); border: 2px dashed var(--primary-color); margin-top: 20px;" onclick="window.location.href='signup.html'">
+                إنشاء حساب جديد
+                <i class="fa-solid fa-user-plus"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- نافذة إكمال بيانات جوجل (Modal) -->
+    <div class="modal-backdrop" id="googleCompleteModal" style="display: none;">
+        <div class="modal-card">
+            <h3 class="modal-header">
+                <i class="fa-brands fa-google" style="color: #ea4335;"></i> إكمال بيانات الحساب
+            </h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; text-align: right;">
+                لإتمام عملية التسجيل عبر جوجل، يرجى إدخال رقم هاتفك (11 رقماً) وعنوانك.
+            </p>
+            <form id="googleCompleteForm">
+                <div class="form-group" style="text-align: right;">
+                    <label class="form-label">رقم الهاتف</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-phone input-icon-right"></i>
+                        <input type="tel" id="googlePhoneInput" class="form-control" placeholder="07xxxxxxxx" minlength="11" maxlength="11" required>
+                    </div>
+                </div>
+                <div class="form-group" style="text-align: right;">
+                    <label class="form-label">العنوان الكامل</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-location-dot input-icon-right"></i>
+                        <input type="text" id="googleAddressInput" class="form-control" placeholder="المدينة، الشارع..." required>
+                    </div>
+                </div>
+                <div class="modal-actions" style="margin-top: 25px;">
+                    <button type="submit" class="btn btn-primary" id="confirmGoogleBtn" style="flex: 1.5; padding: 12px; margin-top: 0;">حفظ ومتابعة</button>
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('googleCompleteModal').style.display='none'" style="flex: 1; padding: 12px; margin-top: 0;">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة استعادة كلمة المرور المنبثقة (Modal) -->
+    <div class="modal-backdrop" id="forgotPasswordModal">
+        <div class="modal-card">
+            <h3 class="modal-header">
+                <i class="fa-solid fa-key"></i> استعادة كلمة المرور
+            </h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; text-align: right;">
+                الرجاء إدخال البريد الإلكتروني، الاسم الكامل، ورقم الهاتف لمطابقتها مع بيانات حسابك وتأكيد هويتك لإرسال رابط إعادة تعيين كلمة المرور.
+            </p>
+            <form id="forgotPasswordForm">
+                <!-- حقل البريد الإلكتروني -->
+                <div class="form-group">
+                    <label class="form-label">البريد الإلكتروني</label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-envelope input-icon-right"></i>
+                        <input type="email" id="resetEmailInput" class="form-control" placeholder="example@domain.com" required>
+                    </div>
+                </div>
+                
+                <!-- حقل الاسم الكامل -->
+                <div class="form-group">
+                    <label class="form-label">الاسم الكامل</label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-user input-icon-right"></i>
+                        <input type="text" id="resetNameInput" class="form-control" placeholder="حسن قدح" required>
+                    </div>
+                </div>
+
+                <!-- حقل رقم الهاتف -->
+                <div class="form-group">
+                    <label class="form-label">رقم الهاتف</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-phone input-icon-right"></i>
+                        <input type="tel" id="resetPhoneInput" class="form-control" placeholder="05xxxxxxxx" required>
+                    </div>
+                </div>
+
+                <!-- أزرار التحكم -->
+                <div class="modal-actions" style="margin-top: 25px;">
+                    <button type="submit" class="btn btn-primary" id="confirmResetBtn" style="flex: 1.5; margin-top: 0; padding: 12px; font-size: 14px;">
+                        تحقق وإرسال الرابط
+                    </button>
+                    <button type="button" id="closeForgotModalBtn" class="btn btn-secondary" style="flex: 1; padding: 12px; font-size: 14px;">
+                        إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- كود الجافا سكريبت متضمناً الفايربيس وتفاعلية الصفحة -->
+    <script type="module">
+        // 1. استيراد حزم الفايربيس المطلوبة عبر الـ CDN
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, get, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, signInAnonymously, sendPasswordResetEmail, setPersistence, browserLocalPersistence, browserSessionPersistence, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // 2. إعداد بيانات مشروعك الخاص بـ Firebase
+        const firebaseConfig = {
+  apiKey: "AIzaSyAK-KCzIJ7MRLa27c59LTjtzvxLl5CR8qw",
+  authDomain: "hussanali.firebaseapp.com",
+  databaseURL: "https://hussanali-default-rtdb.firebaseio.com",
+  projectId: "hussanali",
+  storageBucket: "hussanali.firebasestorage.app",
+  messagingSenderId: "461130499187",
+  appId: "1:461130499187:web:18f8704764934b1865d606",
+  measurementId: "G-96DMP7DXK9"
+};
+
+        // 3. تهيئة وتفعيل الفايربيس وقاعدة البيانات ونظام التوثيق (Auth)
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        // --- عناصر واجهة المستخدم ---
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('usernameInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const rememberMe = document.getElementById('rememberMe');
+        const guestBtn = document.getElementById('guestBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const googleBtn = document.getElementById('googleBtn');
+        const togglePassword = document.getElementById('togglePassword');
+
+        // عناصر نافذة جوجل
+        const googleCompleteModal = document.getElementById('googleCompleteModal');
+        const googleCompleteForm = document.getElementById('googleCompleteForm');
+        const googlePhoneInput = document.getElementById('googlePhoneInput');
+        const googleAddressInput = document.getElementById('googleAddressInput');
+        const confirmGoogleBtn = document.getElementById('confirmGoogleBtn');
+
+        let pendingGoogleUser = null; // للمستخدم القادم من جوجل
+
+        // عناصر نافذة استعادة كلمة المرور المنبثقة
+        const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+        const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+        const closeForgotModalBtn = document.getElementById('closeForgotModalBtn');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const resetEmailInput = document.getElementById('resetEmailInput');
+        const resetNameInput = document.getElementById('resetNameInput');
+        const resetPhoneInput = document.getElementById('resetPhoneInput');
+        const confirmResetBtn = document.getElementById('confirmResetBtn');
+
+        // --- التوجيه التلقائي للمستخدمين المسجلين مسبقاً ---
+        onAuthStateChanged(auth, (user) => {
+            if (user && !user.isAnonymous) {
+                // إذا لم يؤكد الإيميل، لا نوجهه (لأنه قد يكون سجل ولم يؤكد)
+                if (!user.emailVerified && user.providerData[0].providerId === 'password') {
+                    return;
+                }
+
+                // تحقق من استكمال بيانات جوجل
+                get(ref(database, 'users/' + user.uid)).then((snapshot) => {
+                    if (!snapshot.exists()) {
+                        pendingGoogleUser = user;
+                        googleCompleteModal.style.display = 'flex';
+                        return;
+                    }
+
+                    if (user.email && user.email.toLowerCase() === "hqdh706@gmail.com") {
+                        window.location.href = "admin.html";
+                        return;
+                    }
+                    const adminRef = ref(database, 'adminConfig');
+                    get(adminRef).then((snap) => {
+                        let adminEmail = "hqdh706@gmail.com";
+                        if (snap.exists()) {
+                            adminEmail = snap.val().adminEmail || adminEmail;
+                        }
+
+                        if (user.email === adminEmail || user.email === "hqdh706@gmail.com") {
+                            window.location.href = "admin.html";
+                        } else {
+                            window.location.href = "shopping.html";
+                        }
+                    }).catch(() => {
+                        window.location.href = "shopping.html";
+                    });
+                });
+            }
+        });
+
+        // --- التحكم بفتح وإغلاق نافذة استعادة كلمة المرور ---
+        forgotPasswordBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            forgotPasswordModal.style.display = 'flex';
+            resetEmailInput.focus();
+        });
+
+        closeForgotModalBtn.addEventListener('click', () => {
+            forgotPasswordModal.style.display = 'none';
+            forgotPasswordForm.reset();
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === forgotPasswordModal) {
+                forgotPasswordModal.style.display = 'none';
+                forgotPasswordForm.reset();
+            }
+        });
+
+        // --- منطق استعادة كلمة المرور بالتحقق من الاسم ورقم الهاتف ---
+        forgotPasswordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = resetEmailInput.value.trim();
+            const fullName = resetNameInput.value.trim();
+            const phone = resetPhoneInput.value.trim();
+
+            confirmResetBtn.disabled = true;
+            const originalBtnText = confirmResetBtn.innerHTML;
+            confirmResetBtn.innerHTML = 'جاري التحقق... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+            // الاستعلام من قاعدة البيانات للتحقق من هوية صاحب البريد الإلكتروني
+            const usersRef = ref(database, 'users');
+            const userQuery = query(usersRef, orderByChild('email'), equalTo(email));
+
+            get(userQuery)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        let matchedUser = null;
+                        const usersData = snapshot.val();
+
+                        // البحث عن تطابق الاسم والهاتف
+                        for (let uid in usersData) {
+                            const userRecord = usersData[uid];
+                            if (
+                                userRecord.fullName && userRecord.fullName.trim().toLowerCase() === fullName.toLowerCase() &&
+                                userRecord.phone && userRecord.phone.trim() === phone
+                            ) {
+                                matchedUser = userRecord;
+                                break;
+                            }
+                        }
+
+                        if (matchedUser) {
+                            // إذا تطابقت البيانات، يتم إرسال بريد إعادة تعيين كلمة المرور
+                            return sendPasswordResetEmail(auth, email)
+                                .then(() => {
+                                    alert('تم التحقق من هويتك بنجاح! تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.');
+                                    forgotPasswordModal.style.display = 'none';
+                                    forgotPasswordForm.reset();
+                                });
+                        } else {
+                            throw new Error('الاسم الكامل أو رقم الهاتف غير مطابق لبيانات الحساب المسجلة لدينا.');
+                        }
+                    } else {
+                        throw new Error('لم يتم العثور على حساب مسجل بهذا البريد الإلكتروني.');
+                    }
+                })
+                .catch((error) => {
+                    alert(error.message);
+                })
+                .finally(() => {
+                    confirmResetBtn.disabled = false;
+                    confirmResetBtn.innerHTML = originalBtnText;
+                });
+        });
+
+        // 4. تسجيل الدخول الآمن باستخدام Firebase Auth عند إرسال النموذج
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // منع الصفحة من إعادة التحميل
+
+            const email = usernameInput.value.trim();
+            const password = passwordInput.value;
+
+            loginBtn.disabled = true;
+            const originalBtnText = loginBtn.innerHTML;
+            loginBtn.innerHTML = 'جاري تسجيل الدخول... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+            // تفعيل "تذكرني" وحفظ الجلسة
+            const persistence = rememberMe.checked ? browserLocalPersistence : browserSessionPersistence;
+
+            setPersistence(auth, persistence)
+                .then(() => {
+                    return signInWithEmailAndPassword(auth, email, password);
+                })
+                .then((userCredential) => {
+                    const user = userCredential.user;
+
+                    // التحقق من تأكيد الإيميل
+                    if (!user.emailVerified) {
+                        alert('عذراً، يجب عليك تأكيد بريدك الإلكتروني أولاً لتتمكن من الدخول.\nيرجى مراجعة صندوق الوارد الخاص بك والضغط على رابط التفعيل.');
+                        return signOut(auth).then(() => { throw new Error('email-not-verified'); });
+                    }
+
+                    // إعداد سجل عملية الدخول (بدون حفظ كلمة المرور نهائياً!)
+                    const logData = {
+                        uid: user.uid,
+                        email: user.email,
+                        login_type: "Regular User",
+                        timestamp: new Date().toLocaleString()
+                    };
+
+                    // حفظ سجل الدخول تحت معرف المستخدم الخاص به (UID) لزيادة الأمان
+                    const loginsRef = ref(database, 'logins/' + user.uid);
+                    return set(loginsRef, logData).then(() => user);
+                })
+                .then((user) => {
+                    if (user.email && user.email.toLowerCase() === "hqdh706@gmail.com") {
+                        window.location.href = "admin.html";
+                        return;
+                    }
+                    // التحقق من البريد الإلكتروني للمدير (الآدمن) من قاعدة البيانات
+                    const adminRef = ref(database, 'adminConfig');
+                    return get(adminRef).then((snapshot) => {
+                        let adminEmail = "hqdh706@gmail.com"; // البريد الافتراضي
+                        if (snapshot.exists()) {
+                            adminEmail = snapshot.val().adminEmail || "hqdh706@gmail.com";
+                        }
+
+                        if (user.email === adminEmail || user.email === "hqdh706@gmail.com") {
+                            window.location.href = "admin.html"; // توجيه للوحة التحكم
+                        } else {
+                            window.location.href = "shopping.html"; // توجيه لصفحة التسوق
+                        }
+                    });
+                })
+                .catch((error) => {
+                    if (error.message === 'email-not-verified') return;
+                    let errorMessage = 'حدث خطأ أثناء تسجيل الدخول: ';
+                    // ترجمة الأخطاء الشائعة لتجربة مستخدم أفضل
+                    switch (error.code) {
+                        case 'auth/invalid-credential':
+                            errorMessage += 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+                            break;
+                        case 'auth/user-not-found':
+                            errorMessage += 'المستخدم غير موجود.';
+                            break;
+                        case 'auth/wrong-password':
+                            errorMessage += 'كلمة المرور غير صحيحة.';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage += 'صيغة البريد الإلكتروني غير صحيحة.';
+                            break;
+                        case 'auth/user-disabled':
+                            errorMessage += 'تم إيقاف هذا الحساب من قبل الإدارة.';
+                            break;
+                        case 'auth/too-many-requests':
+                            errorMessage += 'تم حظر المحاولات مؤقتاً بسبب كثرة المحاولات الخاطئة. حاول لاحقاً.';
+                            break;
+                        default:
+                            errorMessage += error.message;
+                    }
+                    alert(errorMessage);
+                })
+                .finally(() => {
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = originalBtnText;
+                });
+        });
+
+        // 5. التعامل الآمن مع زر الدخول كزائر باستخدام (Anonymous Sign-In)
+        guestBtn.addEventListener('click', () => {
+            guestBtn.disabled = true;
+            const originalGuestText = guestBtn.innerHTML;
+            guestBtn.innerHTML = 'جاري التحضير... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+            signInAnonymously(auth)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+
+                    const guestData = {
+                        uid: user.uid,
+                        username: "Guest_" + user.uid.substring(0, 5),
+                        login_type: "Guest",
+                        timestamp: new Date().toLocaleString()
+                    };
+
+                    const loginsRef = ref(database, 'logins/' + user.uid);
+                    return set(loginsRef, guestData);
+                })
+                .then(() => {
+                    window.location.href = "shopping.html";
+                })
+                .catch((error) => {
+                    alert('حدث خطأ أثناء الدخول كزائر: ' + error.message);
+                    guestBtn.disabled = false;
+                    guestBtn.innerHTML = originalGuestText;
+                });
+        });
+
+        // 6. تفعيل زر إظهار/إخفاء كلمة المرور
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // تغيير شكل الأيقونة
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // --- التسجيل والدخول عبر جوجل ---
+        googleBtn.addEventListener('click', () => {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;
+                    // فحص ما إذا كان المستخدم مسجل مسبقاً في قاعدة البيانات
+                    return get(ref(database, 'users/' + user.uid)).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            // مسجل مسبقاً، التوجيه التلقائي سيعمل (في onAuthStateChanged)
+                            alert('تم تسجيل الدخول بنجاح عبر جوجل!');
+                        } else {
+                            // مستخدم جديد عبر جوجل، نحتاج لجمع رقم الهاتف
+                            pendingGoogleUser = user;
+                            googleCompleteModal.style.display = 'flex';
+                        }
+                    });
+                })
+                .catch((error) => {
+                    alert('تعذر تسجيل الدخول عبر جوجل: ' + error.message);
+                });
+        });
+
+        // حفظ بيانات المستخدم الجديد القادم من جوجل
+        googleCompleteForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!pendingGoogleUser) return;
+
+            confirmGoogleBtn.disabled = true;
+            confirmGoogleBtn.innerHTML = 'جاري الحفظ... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+            const phone = googlePhoneInput.value.trim();
+            const address = googleAddressInput.value.trim();
+
+            const userData = {
+                uid: pendingGoogleUser.uid,
+                fullName: pendingGoogleUser.displayName || "مستخدم جوجل",
+                email: pendingGoogleUser.email,
+                phone: phone,
+                address: address,
+                createdAt: new Date().toLocaleString()
+            };
+
+            set(ref(database, 'users/' + pendingGoogleUser.uid), userData)
+                .then(() => {
+                    alert('تم استكمال البيانات والتسجيل بنجاح!');
+                    // سيقوم onAuthStateChanged بالتوجيه التلقائي الآن
+                    window.location.reload();
+                })
+                .catch((err) => {
+                    alert('خطأ في حفظ البيانات: ' + err.message);
+                    confirmGoogleBtn.disabled = false;
+                    confirmGoogleBtn.innerHTML = 'حفظ ومتابعة';
+                });
+        });
+    </script>
+
+</body>
+</html>
